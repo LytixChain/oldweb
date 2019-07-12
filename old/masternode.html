@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Lytix</title>
+	<link rel="shortcut icon" type="image/png" href="favicon.png" />
+	<link rel="stylesheet" href="http://lytixchain.org/css/sanitize.min.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/style.min.css">
+	<script defer src="https://use.fontawesome.com/releases/v5.4.2/js/all.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Karla:400,700,700i" rel="stylesheet">
+</head>
+
+<body id="page-top">
+	<header>
+		<nav class="navbar navbar-expand-lg navbar-light fixed-top" id="menu">
+			<div class="container-fluid maxw">
+				<a class="navbar-brand js-scroll-trigger" href="index.html#page-top">
+					<img src="img/logo.png"/>
+				</a>
+				<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+				  Menu
+				  <i class="fa fa-bars"></i>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarResponsive">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item">
+							<a class="nav-link js-scroll-trigger" href="index.html#page-top">Home</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link js-scroll-trigger" href="index.html#timeline">Timeline</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link js-scroll-trigger" href="index.html#specs">Specifications</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link js-scroll-trigger" href="index.html#wallets">Wallets</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link js-scroll-trigger" href="index.html#exchanges">Exchanges</a>
+						</li>
+                                                <li class="nav-item">
+                                                        <a class="nav-link js-scroll-trigger" href="http://lytixchain.org:8001">Block Explorer</a>
+                                                </li>
+
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<section id="hero">
+		<div class="container-fluid maxw">
+			<div class="row justify-content-center">
+				<div class="col-lg-6 col-md-8 text-center mt-2">
+					<h2 class="mb-4">Masternode Guide</h2>
+					<p>
+					This is how to set up a masternode
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="hero">
+                <div class="container-fluid maxw">
+                        <div class="row justify-content-center">
+
+<ul>
+</div> </div><div id="eckb-article-content-body"><div id="kb-article-content"><h2>Contents</h2>
+<ul>
+<li><a href="#intro">Introduction</a></li>
+<li><a href="#config">Configuration of your control wallet</a>
+<ul>
+<li><a href="#install">VPS remote wallet install</a></li>
+</ul>
+</li>
+<li><a href="#config2">Configuration of your Masternode</a></li>
+<li><a href="#start">Start your Masternode</a></li>
+<li><a href="#break">Teardown your Masternode</a></li>
+</ul>
+<h2 id="intro">Introduction</h2>
+<p>This guide is for a single masternode, on a Ubuntu 16.04 64bit server (VPS) running headless and will be controlled from the wallet on your local computer (Control wallet). The wallet on the the VPS will be referred to as the Remote wallet.<br />
+You will need your server details for progressing through this guide.</p>
+<p>First the basic requirements:</p>
+<ol>
+<li>5000 LYTX</li>
+<li>A main computer (Your everyday computer) &#8211; This will run the control wallet, hold your collateral 5000 LYTX and can be turned on and off without affecting the masternode.</li>
+<li>Masternode Server (VPS &#8211; The computer that will be on 24/7)</li>
+<li>A unique IP address for your VPS / Remote wallet</li>
+</ol>
+<p>(For security reasons, you’re are going to need a different IP for each masternode you plan to host)</p>
+<p>The basic reasoning for these requirements is that, you get to keep your LYTX in your local wallet and host your masternode remotely, securely.</p>
+<h2 id="config">Configuration</h2>
+<p>Note: The auto zLYTX minter should be disabled during this setup to prevent autominting of your masternode collateral. BEFORE unlocking your wallet, you can disable autominting in the control wallet option menu.</p>
+<p>1) Using the control wallet, enter the debug console (Tools &gt; Debug console) and type the following command:<br />
+
+<code><strong>masternode genkey</strong> (This will be the masternode’s privkey. We’ll use this later…)</code></p>
+
+<p>2) Using the control wallet still, enter the following command:<br />
+<code><strong>getaccountaddress</strong> <strong>chooseAnyNameForYourMasternode</strong></code></p>
+<p>3) Still in the control wallet, send 5000 LYTX to the address you generated in step 2 (Be 100% sure that you entered the address correctly. You can verify this when you paste the address into the &#8220;Pay To:&#8221; field, the label will autopopulate with the name you chose&#8221;, also make sure this is exactly 5000 LYTX; No less, no more.)<br />
+&#8211; <strong>Be absolutely 100% sure that this is copied correctly. And then check it again. We cannot help you, if you send 5000 LYTX to an incorrect address.</strong></p>
+<p>4) Still in the control wallet, enter the command into the console:<br />
+<code><strong>masternode outputs</strong></code> (This gets the proof of transaction of sending 5000)</p>
+<p>5) Still on the main computer, go into the LYTX data directory, by default in Windows it’ll be <strong><code>%Appdata%/LYTX</code></strong> or Linux <strong><code>~</code></strong></p>
+<p>Find masternode.conf and add the following line to it:</p>
+<p><code> <strong>&lt;Name of Masternode(Use the name you entered earlier for simplicity)&gt; &lt;Unique IP address&gt;:51472 &lt;The result of Step 1&gt; &lt;Result of Step 4&gt; &lt;The number after the long line in Step 4&gt;</strong></code></p>
+<p><code>Example: MN1 31.14.135.27:51472 892WPpkqbr7sr6Si4fdsfssjjapuFzAXwETCrpPJubnrmU6aKzh c8f4965ea57a68d0e6dd384324dfd28cfbe0c801015b973e7331db8ce018716999 1</code></p>
+<p>Substitute it with your own values and without the “&lt;&gt;”s</p>
+<h2 id="install">VPS Remote wallet install</h2>
+<p>7) Install the latest version of the LYTX wallet onto your masternode. The lastest version can be found here: https://github.com/LytixChain/LYTX/releases</p>
+<ol>
+<li>Go to your home directory: <strong><code>cd ~</code></strong></li>
+<li>From your home directory, download the latest version from the LYTX GitHub repository: <strong><code>wget <a href="https://github.com/LytixChain/lytix/releases/download/v1.5.7/lytix-1.5.7-x86_64-linux-gnu.tar.gz">https://github.com/LytixChain/lytix/releases/download/v1.5.7/lytix-1.5.7-x86_64-linux-gnu.tar.gz</a></code></strong>
+<ol>
+<li>The link above is for Ubuntu (or similar), make sure you choose the correct version of the core wallet if you are not using Ubuntu from: <strong><code>https://github.com/LytixChain/LYTX/releases</code></strong></li>
+</ol>
+</li>
+<li><strong>Unzip and extract:  <code>tar -zxvf lytix-1.5.7-x86_64-linux-gnu.tar.gz</code></strong></li>
+<li>Go to your LYTX 1.5.7 directory: <strong><code>cd ~/lytix-1.5.7</code></strong></li>
+<li>Make it easy and just copy these to /usr/local - that way they'll be in your path: <strong><code>sudo cp -r * /usr/local</code></strong>
+<li>Note: If this is the first time running the wallet in the VPS, you&#8217;ll need to attempt to start the wallet <strong><code>lytixd</code> </strong>this will place the config files in your <strong>~/.lytix</strong> data directory
+<ol>
+<li>press <strong><code>CTRL+C</code> </strong>to exit / stop the wallet then continue to step 8</li>
+</ol>
+</li>
+</ol>
+<h2 id="config2">Configuration Cont.</h2>
+<p>8) Now on the masternodes, find the LYTX data directory here.(Linux: ~/.lytix) <strong><code>cd ~/.lytix</code></strong></p>
+<p>9) Open the lytix.conf by typing <strong><code>vi lytix.conf</code></strong> then press <span style="color: #222222; font-family: 'Courier New', monospace;"><span style="background-color: #e9ebec;"><b>i</b></span></span> to go into insert mode and make the config look like this:</p>
+<blockquote>
+<pre> rpcuser=long random username
+ rpcpassword=longer random password
+ rpcallowip=127.0.0.1
+ server=1
+ daemon=1
+ logtimestamps=1
+ maxconnections=256
+ masternode=1
+ externalip=your unique public ip address
+ masternodeprivkey=Result of Step 1</pre>
+</blockquote>
+<p>Make sure to replace rpcuser and rpcpassword with your own.</p>
+<p>10) to exit the editor press <strong><code>esc</code> </strong>then<strong> <code>:wq!</code> </strong>then press enter</p>
+<h2 id="start">Start your masternode</h2>
+<p>11) Now, you need to finally start these things in this order<br />
+&#8211; Start the daemon client in the VPS. <strong><code>lytixd</code></strong><br />
+&#8211; From the Control wallet debug console <strong><code>startmasternode alias false &lt;mymnalias&gt;</code></strong><br />
+where &lt;mymnalias&gt; is the name of your masternode alias (without brackets)</p>
+<p>The following should appear:<br />
+“overall” : “Successfully started 1 masternodes, failed to start 0, total 1”,<br />
+“detail” : [<br />
+{<br />
+“alias” : “&lt;mymnalias&gt;”,<br />
+“result” : “successful”,<br />
+“error” : “”<br />
+}</p>
+<p>&#8211; Back in the VPS (remote wallet), start the masternode <strong><code>lytix-cli startmasternode local false</code></strong><br />
+&#8211; A message &#8220;masternode successfully started&#8221; should appear</p>
+<p>12)Use the following command to check status:</p>
+<p><code><strong>lytix-cli masternode status</strong></code></p>
+<p>You should see something like:</p>
+<blockquote><p>{<br />
+“txhash” : “334545645643534534324238908f36ff4456454dfffff51311”,<br />
+“outputidx” : 0,<br />
+“netaddr” : “45.11.111.111:51472”,<br />
+“addr” : “D6fujc45645645445645R7TiCwexx1LA1”,<br />
+“status” : 4,<br />
+“message” : “Masternode successfully started”<br />
+}</p></blockquote>
+<p>Congratulations! You have successfully created your masternode!</p>
+<p>Now the masternode setup is complete, you are safe to remove &#8220;enablezeromint=0&#8221; from the lytix.conf file of the control wallet.</p>
+<h2 id="break"><strong>Tearing down a Masternode</strong></h2>
+<blockquote><p>1) How do I stop running MN1 on my VPS hoster and delete MN1 from my &#8216;LYTX Core &#8211; Wallet&#8217;?</p></blockquote>
+<p>a) lytix-cli stop from the masternode to stop the wallet.<br />
+b) Then from your controller wallet PC, edit your masternode.conf, delete the MN1 masternode line entry.<br />
+c) Now restart the controller wallet.<br />
+d) your 5000 will now be unlocked.</p>
+<blockquote><p>2) How do I get the 5000 back that I&#8217;ve send to my MN1 address at the beginning of the MN1 setup?</p></blockquote>
+<p>You don&#8217;t need to &#8220;get that back&#8221; as it is already in your wallet.<br />
+Being in the different address is not an issue as that&#8217;s also your address.</p>
+<blockquote><p>3) Can I use this 5000 normally on my wallet then again, and sell it or stake it normally like before? Yes</p></blockquote>
+
+<style>
+/* Mobile (Portrait/Landscape) */
+@media only screen and (max-width: 767px) {
+#wdsb-share-box{
+position:relative !important;
+top:inherit !important;
+left:inherit !important;
+}
+}
+
+
+
+
+
+
+			</div>
+		</div>
+	</section>
+	<footer>
+		<div class="container-fluid maxw">
+			<div class="row">
+				<div class="col-12 text-center">Copyright LytixChain, LLC 2018</div>
+			</div>
+		</div>
+	</footer>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<script src="js/smoothscroll.min.js"></script>
+	<script src="js/app.min.js"></script>
+</body>
+
+</html>
